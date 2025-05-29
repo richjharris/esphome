@@ -55,7 +55,7 @@ static const uint32_t RETURN_DEVICE_TIME_CMD =               0x0001010304;
 
 static const uint8_t standard_update_interval = 30;    // seconds
 static const float kw_to_w_conversion = 1000.0;    // conversion ratio
-
+static const float h_to_s_conversion = 3600.0;    // conversion ratio hours to seconds
 
 class Emerald : public esphome::ble_client::BLEClientNode, public Component {
   // class Emerald : public esphome::ble_client::BLEClientNode, public PollingComponent {
@@ -75,7 +75,7 @@ class Emerald : public esphome::ble_client::BLEClientNode, public Component {
 #endif
   void set_pulses_per_kwh(uint16_t pulses_per_kwh) {
     pulses_per_kwh_ = pulses_per_kwh;
-    pulse_multiplier_ = (standard_update_interval / (pulses_per_kwh / kw_to_w_conversion));
+    pulse_multiplier_ = (kw_to_w_conversion * h_to_s_conversion) / (pulses_per_kwh * standard_update_interval);
   }
   void set_pairing_code(uint32_t pairing_code) { pairing_code_ = pairing_code; }
 
